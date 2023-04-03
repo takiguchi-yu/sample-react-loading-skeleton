@@ -70,38 +70,62 @@ B --false--> C[Gallery]
 ```
 
 ```jsx
-{
-  isLoading ? (
-    <SkeletonGallery />
-  ) : (
-    products.map((product) => {
-      return (
-        <section key={product.id}>
-          <article className="item">
-            <div className="item-img">
-              <img src={product.image} alt="" />
-            </div>
-            <h3 className="item-title">{product.title}</h3>
-            <div className="item-info">
-              <span>{product.category}</span>
-              <div className="item-rating">
-                <span>{product.rating.rate}</span>
-                <span className="item-start">
-                  <FaStar fill="yellow" />
-                </span>
-              </div>
-            </div>
-            <h3 className="item-price">${product.price}</h3>
-            <div className="item__btns">
-              <button className="item__btnadd">Add to card</button>
-              <button className="item__btnbuy">Buy now</button>
-            </div>
-          </article>
-        </section>
-      );
-    })
+const Gallery = () => {
+  const [products, setProducts] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+
+  const fetchData = () => {
+    axios
+      .get('https://fakestoreapi.com/products/category/electronics/')
+      .then(({ data }) => {
+        setProducts(data);
+        setLoading(false);
+      });
+  };
+  // ローディングするためにあえて遅延させる
+  useEffect(() => {
+    setTimeout(() => {
+      fetchData();
+    }, 10000);
+  }, []);
+
+  return (
+    <GalleryStyles>
+      <div className="gallery__grid">
+        {isLoading ? (
+          <SkeletonGallery />
+        ) : (
+          products.map((product) => {
+            return (
+              <section key={product.id}>
+                <article className="item">
+                  <div className="item-img">
+                    <img src={product.image} alt="" />
+                  </div>
+                  <h3 className="item-title">{product.title}</h3>
+                  <div className="item-info">
+                    <span>{product.category}</span>
+                    <div className="item-rating">
+                      <span>{product.rating.rate}</span>
+                      <span className="item-start">
+                        <FaStar fill="yellow" />
+                      </span>
+                    </div>
+                  </div>
+                  <h3 className="item-price">${product.price}</h3>
+                  <div className="item__btns">
+                    <button className="item__btnadd">Add to card</button>
+                    <button className="item__btnbuy">Buy now</button>
+                  </div>
+                </article>
+              </section>
+            );
+          })
+        )}
+      </div>
+    </GalleryStyles>
   );
-}
+};
 ```
 
 <img src="readme-images/gallery.png" width=500>

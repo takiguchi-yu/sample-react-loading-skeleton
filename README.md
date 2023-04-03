@@ -1,70 +1,119 @@
-# Getting Started with Create React App
+# React JS でスケルトンローディングを実装するサンプル
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 事前準備
 
-## Available Scripts
+まずは React アプリ を作成する
 
-In the project directory, you can run:
+```bash
+# create-react-appコマンドをインストール
+npm install create-react-app --global
+# Reactアプリを作成
+npx create-react-app sample-react-loading-skeleton
+# スケルトンローディングのモジュールをインストール
+npm install react-loading-skeleton
+# その他このサンプルで必要なライブラリをインストール
+npm install axios styled-components react-icons
+# Reactアプリの起動
+npm start
+```
 
-### `npm start`
+<img src="readme-images/default.png" width=300>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## スケルトンコンポーネントを作成する
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Array.fill() でコンポーネントを必要な分だけ生成する。
 
-### `npm test`
+```jsx
+const SkeletonGallery = () => {
+  const rows = Array(9)
+    .fill()
+    .map((item, index) => (
+      <section key={index}>
+        <article className="item">
+          <div className="item-img">
+            <Skeleton width={140} height={140} />
+          </div>
+          <h3 className="item-title">
+            <Skeleton count={4} />
+          </h3>
+          <div className="item-info">
+            <Skeleton width={160} height={20} />
+            <Skeleton width={30} height={20} />
+            <Skeleton width={22} height={22} circle={true} />
+          </div>
+          <Skeleton height={48} count={2} className="skeleton" />
+        </article>
+      </section>
+    ));
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  return (
+    <SkeletonTheme color="#F5F5F5" highlightColor="#ffffff">
+      <GalleryStyles className="gallery__grid">
+        <div className="gallery__grid">{rows}</div>
+      </GalleryStyles>
+    </SkeletonTheme>
+  );
+};
+```
 
-### `npm run build`
+<img src="readme-images/skeleton.png" width=500>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## スケルトンローディングと実データを出し分ける
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+isLoading を使ってデータがローディングであればスケルトンコンポーネントを表示するようにする。
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```mermaid
+graph TB
+A[App] --> B{isLoading}
+B --true--> D[Skeleton]
+B --false--> C[Gallery]
+```
 
-### `npm run eject`
+```jsx
+{
+  isLoading ? (
+    <SkeletonGallery />
+  ) : (
+    products.map((product) => {
+      return (
+        <section key={product.id}>
+          <article className="item">
+            <div className="item-img">
+              <img src={product.image} alt="" />
+            </div>
+            <h3 className="item-title">{product.title}</h3>
+            <div className="item-info">
+              <span>{product.category}</span>
+              <div className="item-rating">
+                <span>{product.rating.rate}</span>
+                <span className="item-start">
+                  <FaStar fill="yellow" />
+                </span>
+              </div>
+            </div>
+            <h3 className="item-price">${product.price}</h3>
+            <div className="item__btns">
+              <button className="item__btnadd">Add to card</button>
+              <button className="item__btnbuy">Buy now</button>
+            </div>
+          </article>
+        </section>
+      );
+    })
+  );
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<img src="readme-images/gallery.png" width=500>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## さいごに
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+完全なソースコードは [こちら]() を参照ください。
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# 参考資料
 
-## Learn More
+https://github.com/dvtng/react-loading-skeleton
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+https://www.smashingmagazine.com/2020/04/skeleton-screens-react/
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+https://blog.bitsrc.io/how-to-build-a-skeleton-loader-with-react-1dd359cda582

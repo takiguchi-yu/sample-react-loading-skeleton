@@ -108,7 +108,7 @@ B --false--> C[Gallery]
 
 ## さいごに
 
-完全なソースコードは [こちら]() を参照ください。
+完全なソースコードは [こちら](https://github.com/takiguchi-yu/sample-react-loading-skeleton) を参照ください。
 
 # 参考資料
 

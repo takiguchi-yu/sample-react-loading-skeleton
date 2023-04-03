@@ -117,7 +117,7 @@ const SkeletonGallery = () => {
     ));
 
   return (
-    <SkeletonTheme color="#F5F5F5" highlightColor="#ffffff">
+    <SkeletonTheme baseColor="#f5f5f5" highlightColor="#ffffff">
       <div className="gallery__grid">{rows}</div>
     </SkeletonTheme>
   );

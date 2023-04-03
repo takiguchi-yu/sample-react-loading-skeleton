@@ -47,7 +47,7 @@ const SkeletonGallery = () => {
     ));
 
   return (
-    <SkeletonTheme color="#F5F5F5" highlightColor="#ffffff">
+    <SkeletonTheme baseColor="#f5f5f5" highlightColor="#ffffff">
       <GalleryStyles className="gallery__grid">
         <div className="gallery__grid">{rows}</div>
       </GalleryStyles>
@@ -86,7 +86,7 @@ const Gallery = () => {
   useEffect(() => {
     setTimeout(() => {
       fetchData();
-    }, 10000);
+    }, 5000);
   }, []);
 
   return (
